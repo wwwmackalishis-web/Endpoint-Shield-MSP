@@ -1,0 +1,12 @@
+<service>
+  <id>MackalishisAVAgent</id>
+  <name>Mackalishis AV Agent</name>
+  <description>Mackalishis Antivirus Background Agent</description>
+
+  <executable>MackalishisAVAgent.exe</executable>
+
+  <logpath>logs</logpath>
+  <log mode="roll" />
+
+  <startmode>Automatic</startmode>
+</service>

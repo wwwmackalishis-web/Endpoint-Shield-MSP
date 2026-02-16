@@ -1,0 +1,17 @@
+[
+  {
+    "timestamp": "2026-01-31T02:12:49.561714",
+    "result": {
+      "file_info": {
+        "path": "uploads\\notepad.exe",
+        "sha256": "84b484fd3636f2ca3e468d2821d97aacde8a143a2724a3ae65f48a33ca2fd258"
+      },
+      "defender_scan": {
+        "engine": "Windows Defender",
+        "file": "uploads\\notepad.exe",
+        "status": "scan simulated",
+        "threat_detected": false
+      }
+    }
+  }
+]

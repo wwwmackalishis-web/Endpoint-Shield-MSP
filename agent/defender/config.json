@@ -1,0 +1,5 @@
+{
+  "client_id": "client_001",
+  "api_key": "supersecretkey123",
+  "server": "http://10.0.0.253:8000"
+}
