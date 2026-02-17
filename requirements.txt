@@ -20,8 +20,6 @@ Pygments==2.19.2
 pyinstaller==6.19.0
 pyinstaller-hooks-contrib==2026.0
 pytest==9.0.2
-pywin32==311
-pywin32-ctypes==0.2.3
 setuptools==82.0.0
 starlette==0.50.0
 typing-inspection==0.4.2
