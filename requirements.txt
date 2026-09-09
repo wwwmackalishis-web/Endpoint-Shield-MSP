@@ -1,6 +1,24 @@
-fastapi==0.128.0
-uvicorn==0.40.0
+fastapi==0.135.1
+uvicorn==0.41.0
 pydantic==2.12.5
+sqlalchemy==2.0.48
 httpx==0.28.1
 python-multipart
-
+requests==2.32.5
+# Only used when MSP_DATABASE_URL points at Postgres (app/main.py falls
+# back to SQLite otherwise) — already in the local .venv, adding it here so
+# a fresh deploy has it too.
+psycopg2-binary==2.9.11
+# Auth (app/auth.py): password hashing + JWT issuance for the dashboard's
+# login. bcrypt is pinned below 4.1 - passlib 1.7.4's bcrypt handler reads
+# bcrypt.__about__.__version__, which bcrypt>=4.1 removed; unpinned, this
+# breaks with an AttributeError on the very first password check.
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+python-jose[cryptography]==3.3.0
+# On-Call / Escalation Router Agent (app/escalation_router.py) uses
+# zoneinfo for business-hours routing. Linux ships an IANA tz database on
+# the OS itself, but Windows does not - without this, ZoneInfo(...) raises
+# ZoneInfoNotFoundError on every Windows dev machine and container image
+# that isn't Linux, even though the same code works unmodified on Render.
+tzdata==2025.2

@@ -1,0 +1,90 @@
+=== pip install -r requirements.txt === 
+Requirement already satisfied: fastapi==0.135.1 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from -r requirements.txt (line 1)) (0.135.1)
+Requirement already satisfied: uvicorn==0.41.0 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from -r requirements.txt (line 2)) (0.41.0)
+Requirement already satisfied: pydantic==2.12.5 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from -r requirements.txt (line 3)) (2.12.5)
+Requirement already satisfied: sqlalchemy==2.0.48 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from -r requirements.txt (line 4)) (2.0.48)
+Requirement already satisfied: httpx==0.28.1 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from -r requirements.txt (line 5)) (0.28.1)
+Requirement already satisfied: python-multipart in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from -r requirements.txt (line 6)) (0.0.22)
+Requirement already satisfied: requests==2.32.5 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from -r requirements.txt (line 7)) (2.32.5)
+Requirement already satisfied: psycopg2-binary==2.9.11 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from -r requirements.txt (line 11)) (2.9.11)
+Requirement already satisfied: passlib==1.7.4 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from passlib[bcrypt]==1.7.4->-r requirements.txt (line 16)) (1.7.4)
+Requirement already satisfied: bcrypt==4.0.1 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from -r requirements.txt (line 17)) (4.0.1)
+Requirement already satisfied: python-jose==3.3.0 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from python-jose[cryptography]==3.3.0->-r requirements.txt (line 18)) (3.3.0)
+Requirement already satisfied: starlette>=0.46.0 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from fastapi==0.135.1->-r requirements.txt (line 1)) (0.52.1)
+Requirement already satisfied: typing-extensions>=4.8.0 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from fastapi==0.135.1->-r requirements.txt (line 1)) (4.15.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from fastapi==0.135.1->-r requirements.txt (line 1)) (0.4.2)
+Requirement already satisfied: annotated-doc>=0.0.2 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from fastapi==0.135.1->-r requirements.txt (line 1)) (0.0.4)
+Requirement already satisfied: click>=7.0 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from uvicorn==0.41.0->-r requirements.txt (line 2)) (8.3.1)
+Requirement already satisfied: h11>=0.8 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from uvicorn==0.41.0->-r requirements.txt (line 2)) (0.16.0)
+Requirement already satisfied: annotated-types>=0.6.0 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from pydantic==2.12.5->-r requirements.txt (line 3)) (0.7.0)
+Requirement already satisfied: pydantic-core==2.41.5 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from pydantic==2.12.5->-r requirements.txt (line 3)) (2.41.5)
+Requirement already satisfied: greenlet>=1 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from sqlalchemy==2.0.48->-r requirements.txt (line 4)) (3.3.2)
+Requirement already satisfied: anyio in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 5)) (4.12.1)
+Requirement already satisfied: certifi in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 5)) (2026.2.25)
+Requirement already satisfied: httpcore==1.* in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 5)) (1.0.9)
+Requirement already satisfied: idna in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 5)) (3.11)
+Requirement already satisfied: charset_normalizer<4,>=2 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from requests==2.32.5->-r requirements.txt (line 7)) (3.4.5)
+Requirement already satisfied: urllib3<3,>=1.21.1 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from requests==2.32.5->-r requirements.txt (line 7)) (2.6.3)
+Requirement already satisfied: ecdsa!=0.15 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from python-jose==3.3.0->python-jose[cryptography]==3.3.0->-r requirements.txt (line 18)) (0.19.2)
+Requirement already satisfied: rsa in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from python-jose==3.3.0->python-jose[cryptography]==3.3.0->-r requirements.txt (line 18)) (4.9.1)
+Requirement already satisfied: pyasn1 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from python-jose==3.3.0->python-jose[cryptography]==3.3.0->-r requirements.txt (line 18)) (0.6.4)
+Requirement already satisfied: cryptography>=3.4.0 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from python-jose[cryptography]==3.3.0->-r requirements.txt (line 18)) (50.0.1)
+Requirement already satisfied: colorama in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from click>=7.0->uvicorn==0.41.0->-r requirements.txt (line 2)) (0.4.6)
+Requirement already satisfied: cffi>=2.0.0 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from cryptography>=3.4.0->python-jose[cryptography]==3.3.0->-r requirements.txt (line 18)) (2.1.1)
+Requirement already satisfied: six>=1.9.0 in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from ecdsa!=0.15->python-jose==3.3.0->python-jose[cryptography]==3.3.0->-r requirements.txt (line 18)) (1.17.0)
+Requirement already satisfied: pycparser in c:\users\anthony mcneill\antivirus-orchestrator\venv\lib\site-packages (from cffi>=2.0.0->cryptography>=3.4.0->python-jose[cryptography]==3.3.0->-r requirements.txt (line 18)) (3.0)
+
+[notice] A new release of pip is available: 24.2 -> 26.2.1
+[notice] To update, run: C:\Users\Anthony McNeill\antivirus-orchestrator\venv\Scripts\python.exe -m pip install --upgrade pip
+ 
+=== running test_monitor.py === 
+WARNING: MSP_JWT_SECRET is not set - using an insecure, publicly-known dev secret. Every JWT this process issues is forgeable. Set MSP_JWT_SECRET before this ever runs anywhere but localhost.
+C:\Users\Anthony McNeill\antivirus-orchestrator\test_monitor.py:56: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  last_seen=datetime.utcnow() - timedelta(minutes=20),  # well past the 600s default threshold
+ALERT EMAIL SKIPPED (not configured) - subject='[Endpoint Shield] TEST-STALE-PC is offline'
+TEST-STALE-PC has not checked in for over 20 min.
+
+Hostname: TEST-STALE-PC
+Tenant:   Test Dental Office
+IP:       10.0.0.5
+OS:       Windows 11
+Last seen: 2026-09-08T23:54:43.784631Z
+C:\Users\Anthony McNeill\antivirus-orchestrator\test_monitor.py:92: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  device.last_seen = datetime.utcnow()
+ALERT EMAIL SKIPPED (not configured) - subject='[Endpoint Shield] TEST-STALE-PC is back online'
+TEST-STALE-PC is back online.
+
+Hostname: TEST-STALE-PC
+Tenant:   Test Dental Office
+IP:       10.0.0.5
+OS:       Windows 11
+Last seen: 2026-09-09T00:14:43.869632Z
+
+Outage duration: 0 min
+ALERT EMAIL SKIPPED (not configured) - subject='[Endpoint Shield] TEST-NEVER-SEEN-PC is offline'
+TEST-NEVER-SEEN-PC has not checked in for over an unknown time (never reported in).
+
+Hostname: TEST-NEVER-SEEN-PC
+Tenant:   Test Dental Office
+IP:       10.0.0.9
+OS:       (unknown)
+Last seen: never
+[PASS] app.main imports without error
+[PASS] first pass ran without raising
+[PASS] alert state created
+[PASS] alert state status == 'alerting'
+[PASS] notify_count == 1
+[PASS] first_silent_at set
+[PASS] audit row for alert.triggered written
+[PASS] audit row scoped to correct tenant
+[PASS] no re-notify inside the renotify window (notify_count still 1)
+[PASS] no premature escalation audit row
+[PASS] alert state cleared back to 'ok'
+[PASS] notify_count reset to 0
+[PASS] audit row for alert.resolved written
+[PASS] device with last_seen=NULL also alerts
+[PASS] open-alerts query returns exactly the still-silent device
+
+test db removed: C:\Users\ANTHON~1\AppData\Local\Temp\monitor_test.db
+
+ALL CHECKS PASSED

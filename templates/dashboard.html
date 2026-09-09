@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mackalishis MSP Dashboard</title>
+<style>
+body{font-family:Arial;margin:20px}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #ccc;padding:8px}
+th{background:#4CAF50;color:white}
+</style>
+</head>
+<body>
+
+<h1>Mackalishis MSP Dashboard</h1>
+
+<p>
+Devices: {{ device_count }} |
+Threats: {{ threat_count }}
+</p>
+
+<h2>Devices</h2>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Hostname</th>
+<th>IP</th>
+<th>Status</th>
+</tr>
+
+{% for d in devices %}
+<tr>
+<td>{{ d.id }}</td>
+<td>{{ d.hostname }}</td>
+<td>{{ d.ip_address }}</td>
+<td>{{ d.status }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+<h2>Threats</h2>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Hash</th>
+<th>Type</th>
+<th>Severity</th>
+</tr>
+
+{% for t in threats %}
+<tr>
+<td>{{ t.id }}</td>
+<td>{{ t.file_hash }}</td>
+<td>{{ t.threat_type }}</td>
+<td>{{ t.severity }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>

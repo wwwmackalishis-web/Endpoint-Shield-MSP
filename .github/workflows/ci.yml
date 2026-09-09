@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  api:
+    name: Backend — API + migration checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install backend dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run verify_api.py (33 endpoint checks + startup migration test)
+        run: python verify_api.py
+
+  dashboard:
+    name: Frontend — build + tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: msp-dashboard
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: msp-dashboard/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run test suite
+        run: npm test -- --watchAll=false
+
+      - name: Production build
+        run: npm run build
+
+  sign-agent:
+    name: Agent — code-sign agent.ps1
+    runs-on: windows-latest
+    needs: [api, dashboard]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+
+      # Signing needs a real code-signing certificate from a CA (EV or
+      # standard OV) — this repo has none. Until AGENT_SIGNING_CERT_PFX is
+      # added as a secret (base64 of the .pfx, paired with
+      # AGENT_SIGNING_CERT_PASSWORD), this step is skipped rather than faked
+      # with a self-signed cert, which Windows SmartScreen would still flag.
+      - name: Check for a real signing certificate
+        id: cert-check
+        shell: bash
+        run: |
+          if [ -n "${{ secrets.AGENT_SIGNING_CERT_PFX }}" ]; then
+            echo "has_cert=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_cert=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::No AGENT_SIGNING_CERT_PFX secret configured — agent.ps1 will ship unsigned."
+          fi
+
+      - name: Sign agent.ps1
+        if: steps.cert-check.outputs.has_cert == 'true'
+        shell: pwsh
+        run: |
+          $bytes = [Convert]::FromBase64String("${{ secrets.AGENT_SIGNING_CERT_PFX }}")
+          [IO.File]::WriteAllBytes("cert.pfx", $bytes)
+          $securePw = ConvertTo-SecureString "${{ secrets.AGENT_SIGNING_CERT_PASSWORD }}" -AsPlainText -Force
+          $cert = Get-PfxCertificate -FilePath "cert.pfx" -Password $securePw
+          Set-AuthenticodeSignature -FilePath agent.ps1 -Certificate $cert -TimestampServer "http://timestamp.digicert.com"
+          Remove-Item cert.pfx
+
+      - name: Upload signed agent
+        if: steps.cert-check.outputs.has_cert == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-ps1-signed
+          path: agent.ps1

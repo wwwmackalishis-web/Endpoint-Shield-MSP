@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Endpoint Monitoring Report — Endpoint Shield Solutions</title>
+<!--
+  Endpoint Shield Solutions — client monitoring report template.
+
+  Render this server-side or in the dashboard, replacing every {{token}} with
+  a value measured from the platform. Nothing in this document is a static
+  claim: every figure below traces to GET /api/v1/health-audit and the
+  tenant's device list for the reporting period.
+
+  Populate from:
+    GET /api/v1/health-audit  ->  total_devices, reporting_last_5min,
+                                  silent_over_5min, offline_percent, status
+    GET /devices              ->  per-endpoint rows and last_seen values
+
+  DO NOT hardcode any figure in this template. A monitoring report that
+  reports the same numbers every month is worse than no report at all - it
+  is a document that misleads a client about their own posture, and it is
+  the first thing an auditor will test.
+-->
+<style>
+  :root {
+    --navy: #1B2A5E;
+    --purple: #7B3FF2;
+    --ink: #16181d;
+    --muted: #5b6172;
+    --line: #dfe3ec;
+    --paper: #ffffff;
+    --wash: #f6f7fb;
+    --ok: #1a7f5a;
+    --warn: #9a6a00;
+    --bad: #b3261e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--wash);
+    color: var(--ink);
+    font: 14px/1.55 "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  .sheet {
+    max-width: 8.5in;
+    margin: 24px auto;
+    background: var(--paper);
+    padding: 0.75in 0.8in 0.9in;
+    box-shadow: 0 2px 18px rgba(20,26,50,.10);
+  }
+
+  header { border-bottom: 3px solid var(--purple); padding-bottom: 18px; }
+  .brandrow { display: flex; align-items: center; gap: 14px; }
+  .shield { width: 42px; height: 48px; flex: none; }
+  .brand { font-size: 19px; font-weight: 700; color: var(--navy); letter-spacing: .3px; }
+  .tagline { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
+  .docmeta { margin-left: auto; text-align: right; font-size: 11.5px; color: var(--muted); }
+
+  h1 {
+    font-size: 25px; color: var(--navy); margin: 26px 0 4px; letter-spacing: -.2px;
+  }
+  .period { font-size: 13.5px; color: var(--muted); margin-bottom: 22px; }
+
+  .scope {
+    background: var(--wash);
+    border-left: 3px solid var(--navy);
+    padding: 13px 16px;
+    font-size: 12.5px;
+    color: #333846;
+    margin-bottom: 26px;
+  }
+  .scope b { color: var(--navy); }
+
+  h2 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: .9px;
+    color: var(--navy); margin: 30px 0 12px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--line);
+  }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .stat { border: 1px solid var(--line); border-radius: 6px; padding: 13px 14px; }
+  .stat .n { font-size: 25px; font-weight: 700; color: var(--navy); line-height: 1.1; }
+  .stat .l { font-size: 10.5px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); margin-top: 5px; }
+
+  .verdict { display: flex; align-items: baseline; gap: 10px; margin: 18px 0 4px; }
+  .verdict .badge {
+    font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+    padding: 4px 11px; border-radius: 3px;
+  }
+  .badge.operational { background: #e6f4ee; color: var(--ok); }
+  .badge.degraded    { background: #fdf3e0; color: var(--warn); }
+  .badge.critical    { background: #fdeceb; color: var(--bad); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th {
+    text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .6px;
+    color: var(--muted); font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--line);
+  }
+  td { padding: 8px 10px; border-bottom: 1px solid #eef1f7; }
+  td.status-online  { color: var(--ok); font-weight: 600; }
+  td.status-stale   { color: var(--warn); font-weight: 600; }
+  td.status-offline { color: var(--bad); font-weight: 600; }
+  .empty { padding: 18px 10px; color: var(--muted); font-style: italic; }
+
+  ul.actions { margin: 0; padding-left: 20px; font-size: 13px; }
+  ul.actions li { margin-bottom: 7px; }
+
+  .limits {
+    margin-top: 30px; padding: 15px 17px; border: 1px solid var(--line);
+    border-radius: 6px; font-size: 11.5px; color: #414755; background: #fcfcfe;
+  }
+  .limits b { color: var(--navy); }
+  .limits ul { margin: 8px 0 0; padding-left: 18px; }
+  .limits li { margin-bottom: 5px; }
+
+  footer {
+    margin-top: 30px; padding-top: 14px; border-top: 1px solid var(--line);
+    display: flex; gap: 20px; font-size: 11px; color: var(--muted);
+  }
+  footer .sig { margin-left: auto; text-align: right; }
+
+  @media print {
+    body { background: #fff; }
+    .sheet { margin: 0; box-shadow: none; max-width: none; padding: 0.5in; }
+    h2 { break-after: avoid; }
+    tr { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <div class="brandrow">
+      <svg class="shield" viewBox="0 0 42 48" aria-hidden="true">
+        <path d="M21 1.5 40 8v17c0 11.4-7.8 19.2-19 21.9C9.8 44.2 2 36.4 2 25V8L21 1.5Z"
+              fill="#1B2A5E"/>
+        <path d="M21 1.5 40 8v17c0 11.4-7.8 19.2-19 21.9V1.5Z" fill="#22347a"/>
+        <path d="M13 24.2l5.6 5.6L30 18.4" fill="none" stroke="#7B3FF2"
+              stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <div class="brand">ENDPOINT SHIELD SOLUTIONS</div>
+        <div class="tagline">Endpoint Security &amp; Compliance Monitoring</div>
+      </div>
+      <div class="docmeta">
+        Report No. {{report_number}}<br>
+        Generated {{generated_at}}
+      </div>
+    </div>
+  </header>
+
+  <h1>Endpoint Monitoring Report</h1>
+  <div class="period">
+    Prepared for <strong>{{client_name}}</strong> &nbsp;·&nbsp; {{client_location}}<br>
+    Reporting period: {{period_start}} — {{period_end}}
+  </div>
+
+  <div class="scope">
+    <b>Scope of this report.</b> This report documents the availability and reporting
+    status of the endpoints enrolled in monitoring by Endpoint Shield Solutions during
+    the period stated above. All figures are measured from platform telemetry.
+    <br><br>
+    <b>What this report is not.</b> It is not a certification of HIPAA compliance and
+    does not assess {{client_name}}'s administrative safeguards, workforce training,
+    physical security, business processes, or any system not enrolled in monitoring.
+    Endpoint availability is one input to a compliance program, not a substitute for one.
+  </div>
+
+  <h2>Fleet Summary</h2>
+
+  <div class="stats">
+    <div class="stat"><div class="n">{{total_devices}}</div><div class="l">Endpoints enrolled</div></div>
+    <div class="stat"><div class="n">{{reporting_now}}</div><div class="l">Reporting at generation</div></div>
+    <div class="stat"><div class="n">{{silent_now}}</div><div class="l">Silent at generation</div></div>
+    <div class="stat"><div class="n">{{uptime_percent}}%</div><div class="l">Period reporting rate</div></div>
+  </div>
+
+  <div class="verdict">
+    <span class="badge {{status_class}}">{{status_label}}</span>
+    <span style="font-size:12.5px;color:var(--muted)">
+      Threshold: a fleet is reported as Degraded when more than 10% of enrolled
+      endpoints have not reported within the monitoring window.
+    </span>
+  </div>
+
+  <h2>Endpoint Detail</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Hostname</th>
+        <th>Operating system</th>
+        <th>Location</th>
+        <th>Last reported</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Repeat one row per device. Emit the empty row below if there are none. -->
+      {{#devices}}
+      <tr>
+        <td>{{hostname}}</td>
+        <td>{{os}}</td>
+        <td>{{location}}</td>
+        <td>{{last_seen_display}}</td>
+        <td class="status-{{status_key}}">{{status_display}}</td>
+      </tr>
+      {{/devices}}
+      {{^devices}}
+      <tr><td colspan="5" class="empty">No endpoints were enrolled during this period.</td></tr>
+      {{/devices}}
+    </tbody>
+  </table>
+
+  <h2>Events and Actions Taken</h2>
+  <ul class="actions">
+    <!-- Populate from your ticketing record for the period. If nothing occurred,
+         say so explicitly - an empty section reads as an omission. -->
+    {{#actions}}
+    <li>{{date}} — {{description}}</li>
+    {{/actions}}
+    {{^actions}}
+    <li>No endpoint availability events required intervention during this period.</li>
+    {{/actions}}
+  </ul>
+
+  <div class="limits">
+    <b>Basis and limitations of this report</b>
+    <ul>
+      <li>Figures are derived from agent check-in telemetry recorded by the Endpoint
+          Shield Solutions platform. An endpoint that is powered off during normal
+          closed hours is reported as not reporting; this is expected and is not by
+          itself an indication of a fault.</li>
+      <li>Monitoring covers only endpoints enrolled by {{client_name}}. Devices added
+          to the practice network but not enrolled are outside the scope of this report.</li>
+      <li>Monitoring and escalation coverage is provided during the hours set out in the
+          services agreement between {{client_name}} and Endpoint Shield Solutions.</li>
+      <li>This report does not evaluate whether any endpoint contained, processed, or
+          exposed protected health information.</li>
+    </ul>
+  </div>
+
+  <footer>
+    <div>
+      <strong style="color:var(--navy)">Endpoint Shield Solutions</strong><br>
+      {{company_address}}<br>
+      {{company_contact}}
+    </div>
+    <div class="sig">
+      Prepared by {{prepared_by}}<br>
+      {{prepared_by_title}}<br>
+      Retain with practice compliance records.
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

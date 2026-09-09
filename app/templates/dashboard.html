@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Dental MSP Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #2E86C1; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #2E86C1; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Dental MSP Dashboard</h1>
+    <p>Total Devices: {{ device_count }}</p>
+    <p>Total Threats: {{ threat_count }}</p>
+
+    <h2>Devices</h2>
+    <table>
+        <tr><th>ID</th><th>Hostname</th><th>IP Address</th><th>Tenant ID</th></tr>
+        {% for device in devices %}
+        <tr>
+            <td>{{ device.id }}</td>
+            <td>{{ device.hostname }}</td>
+            <td>{{ device.ip_address }}</td>
+            <td>{{ device.tenant_id }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Threats</h2>
+    <table>
+        <tr><th>ID</th><th>File Hash</th><th>Type</th><th>Severity</th><th>Detected At</th></tr>
+        {% for threat in threats %}
+        <tr>
+            <td>{{ threat.id }}</td>
+            <td>{{ threat.file_hash }}</td>
+            <td>{{ threat.threat_type }}</td>
+            <td>{{ threat.severity }}</td>
+            <td>{{ threat.detected_at }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
